@@ -1,0 +1,14 @@
+.frame {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  grid-template-rows: minmax(100vh, auto);
+  min-height: 100vh;
+  background: #f4f5f9;
+  color: #1b2430;
+  color-scheme: light;
+}
+
+.main {
+  min-width: 0;
+  padding: 27px 31px 31px;
+}
