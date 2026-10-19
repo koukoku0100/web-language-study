@@ -4,6 +4,7 @@ import courseLessonReducer from "@/features/courses/courseLessonSlice";
 import dashboardReducer from "@/features/dashboard/dashboardSlice";
 import loginReducer from "@/features/login/loginSlice";
 import questionBankReducer from "@/features/questions/questionBankSlice";
+import learnerAdminReducer from "@/features/users/learnerAdminSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     courseLesson: courseLessonReducer,
     questionBank: questionBankReducer,
+    learnerAdmin: learnerAdminReducer,
   },
 });
 
