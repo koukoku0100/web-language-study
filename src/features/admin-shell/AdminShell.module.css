@@ -1,0 +1,109 @@
+.sidebar {
+  position: relative;
+  width: 180px;
+  height: 100%;
+  background: #1c2431;
+  color: #ced6e3;
+}
+
+.brand {
+  padding: 22px 12px 0 21px;
+}
+
+.productName {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 14px;
+}
+
+.productDescription {
+  margin-top: 9px;
+  color: #9fa9b8;
+  font-size: 9px;
+  font-weight: normal;
+  line-height: 9px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 27px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  height: 33px;
+  margin: 0 12px;
+  padding: 0 8px 0 9px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #ced6e3;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 11px;
+  text-align: left;
+}
+
+.navItemActive {
+  background: #2b4c9b;
+  color: #ffffff;
+}
+
+.footer {
+  position: absolute;
+  bottom: 30px;
+  left: 21px;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -9px;
+  width: 156px;
+  height: 1px;
+  background: #374051;
+}
+
+.adminName {
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: normal;
+  line-height: 10px;
+}
+
+.adminRole {
+  margin-top: 9px;
+  color: #9fa9b8;
+  font-size: 9px;
+  font-weight: normal;
+  line-height: 9px;
+}
+
+.adminEmail {
+  margin-top: 5px;
+  color: #9fa9b8;
+  font-size: 9px;
+  font-weight: normal;
+  line-height: 9px;
+}
+
+.logout {
+  display: block;
+  margin-top: 17px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #ced6e3;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: normal;
+  line-height: 10px;
+  text-align: left;
+  text-decoration: underline;
+}
