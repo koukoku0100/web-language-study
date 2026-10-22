@@ -9,19 +9,7 @@
   justify-content: space-between;
 }
 
-.title {
-  color: #1b2430;
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 18px;
-}
-
-.description {
-  margin-top: 10px;
-  color: #5b6675;
-  font-size: 11px;
-  font-weight: normal;
-  line-height: 11px;
+.nowrap {
   white-space: nowrap;
 }
 
@@ -37,76 +25,21 @@
   gap: 9px;
 }
 
-.sampleBadge {
-  height: 20px;
-  padding: 0 9px;
-  border-radius: 10px;
-  background: #fef0cf;
-  color: #864704;
-  font-size: 9px;
-  font-weight: normal;
-  line-height: 20px;
-  white-space: nowrap;
-}
-
-.primaryButton,
-.secondaryButton,
-.select,
-.textarea,
-.choiceInput {
-  font-family: inherit;
-  font-weight: normal;
-}
-
-.primaryButton,
-.secondaryButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 33px;
-  padding: 0 15px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: bold;
-  line-height: 11px;
-}
-
-.primaryButton {
-  border: 0;
-  background: #2b4c9b;
-  color: #ffffff;
-}
-
-.secondaryButton {
-  border: 1px solid #919ca8;
-  background: #ffffff;
-  color: #1b2430;
-}
-
-.listCard,
-.editCard {
-  width: 838px;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px #dee4ea;
+.headerButton {
+  --button-height: 33px;
+  --button-font-weight: 700;
 }
 
 .listCard {
+  width: 838px;
   margin-top: 22px;
   padding: 21px 18px 21px;
 }
 
 .editCard {
+  width: 838px;
   margin-top: 20px;
   padding: 21px 18px 18px;
-}
-
-.listHeading,
-.editHeading {
-  color: #1b2430;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 12px;
 }
 
 .listHeading {
@@ -115,15 +48,6 @@
 
 .editHeading {
   margin-bottom: 22px;
-}
-
-.label {
-  display: block;
-  margin-bottom: 8px;
-  color: #1b2430;
-  font-size: 10px;
-  font-weight: bold;
-  line-height: 10px;
 }
 
 .filters {
@@ -135,109 +59,34 @@
   width: 291px;
 }
 
-.filterFormat,
-.filterStatus {
-  width: 246px;
-}
-
 .filterFormat {
   width: 245px;
 }
 
-.select,
-.textarea,
-.choiceInput {
-  display: block;
-  border: 1px solid #919ca8;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #1b2430;
-  font-size: 10px;
-  line-height: 14px;
+.filterStatus {
+  width: 246px;
 }
 
-.select {
+.full {
   width: 100%;
-  height: 32px;
-  padding: 0 8px 0 14px;
-}
-
-.table {
-  margin-top: 0;
-}
-
-.headRow,
-.dataRow,
-.selectedRow {
-  display: grid;
-  grid-template-columns: 81px 351px 169px 73px 62px 66px;
-  align-items: center;
-  border-bottom: 1px solid #e0e3e8;
-}
-
-.headRow {
-  height: 39px;
-  background: #ffffff;
-  color: #5b6675;
-  font-size: 9px;
-  font-weight: bold;
-  line-height: 9px;
-}
-
-.dataRow,
-.selectedRow {
-  height: 55px;
-  color: #1b2430;
-  font-size: 10px;
-  font-weight: normal;
-  line-height: 10px;
 }
 
 .selectedRow {
   background: #e9edf8;
-}
-
-.headRow > span,
-.dataRow > span,
-.selectedRow > span {
-  min-width: 0;
-  padding-left: 9px;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.statusBadge {
-  display: inline-block;
-  height: 17px;
-  padding: 0 7px;
-  border-radius: 8px;
-  font-size: 9px;
-  font-weight: bold;
-  line-height: 17px;
-  white-space: nowrap;
 }
 
 .badgePublished {
-  background: #e9edf8;
-  color: #1f3e70;
+  --status-badge-color: #1f3e70;
+  --status-badge-padding-inline: 7px;
 }
 
 .badgeDraft {
-  background: #edf0f5;
-  color: #464d5e;
+  --status-badge-color: #464d5e;
+  --status-badge-padding-inline: 7px;
 }
 
 .badgePrivate {
-  background: #fff0dd;
-  color: #8e4601;
-}
-
-.count {
-  margin-top: 15px;
-  color: #5b6675;
-  font-size: 9px;
-  font-weight: normal;
-  line-height: 9px;
+  --status-badge-padding-inline: 7px;
 }
 
 .columns {
@@ -252,8 +101,6 @@
 
 .textarea {
   width: 392px;
-  padding: 8px 10px;
-  resize: none;
 }
 
 .promptInput {
@@ -269,7 +116,7 @@
 }
 
 .choiceLabel {
-  margin-bottom: 10px;
+  --field-label-margin-bottom: 10px;
 }
 
 .choices {
@@ -309,9 +156,7 @@
 
 .choiceInput {
   width: 349px;
-  height: 32px;
   margin-left: auto;
-  padding: 8px 10px;
 }
 
 .divider {

@@ -1,0 +1,68 @@
+.badge {
+  display: inline-block;
+  border-radius: 8px;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.published,
+.draft,
+.private,
+.allowed {
+  height: 17px;
+  line-height: 17px;
+}
+
+.active,
+.suspended {
+  height: 15px;
+  line-height: 15px;
+}
+
+.published,
+.draft,
+.private,
+.active,
+.suspended {
+  font-weight: bold;
+}
+
+.allowed {
+  font-weight: normal;
+}
+
+.published {
+  padding: 0 var(--status-badge-padding-inline, 8px);
+  background: var(--status-badge-background, #e9edf8);
+  color: var(--status-badge-color, #21357a);
+}
+
+.draft {
+  padding: 0 var(--status-badge-padding-inline, 8px);
+  background: var(--status-badge-background, #edf0f5);
+  color: var(--status-badge-color, #454d5a);
+}
+
+.private {
+  padding: 0 var(--status-badge-padding-inline, 8px);
+  background: var(--status-badge-background, #fff0dd);
+  color: var(--status-badge-color, #8e4601);
+}
+
+.active {
+  padding: 0 var(--status-badge-padding-inline, 6px);
+  background: var(--status-badge-background, #e9edf8);
+  color: var(--status-badge-color, #1f3e70);
+}
+
+.suspended {
+  padding: 0 var(--status-badge-padding-inline, 6px);
+  background: var(--status-badge-background, #fff0dd);
+  color: var(--status-badge-color, #834a05);
+}
+
+.allowed {
+  padding: 0 var(--status-badge-padding-inline, 9px);
+  background: var(--status-badge-background, #e9edf8);
+  color: var(--status-badge-color, #1f3a76);
+}

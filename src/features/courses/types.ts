@@ -1,8 +1,11 @@
-export type LessonStatus = "published" | "draft" | "private";
+import type { LessonStatus } from "@/features/lesson-status/lessonStatus";
 
-export type SelectOption = {
+export type { LessonStatus };
+
+export type CourseOption = {
   id: string;
-  label: string;
+  courseName: string;
+  lessonCount: number;
 };
 
 export type LessonListItem = {
@@ -21,8 +24,8 @@ export type LinkedQuestionSet = {
 export type LessonDraft = {
   lessonName: string;
   videoUrl: string;
-  publishStatusId: string;
-  displayOrder: string;
+  publishStatusId: LessonStatus;
+  displayOrder: number;
   description: string;
   linkedQuestionSets: LinkedQuestionSet[];
 };
@@ -32,9 +35,8 @@ export type CourseLessonState = {
   showSampleDataBadge: boolean;
   title: string;
   description: string;
-  courseOptions: SelectOption[];
+  courseOptions: CourseOption[];
   selectedCourseId: string;
   lessons: LessonListItem[];
-  publishStatusOptions: SelectOption[];
   lessonDraft: LessonDraft;
 };

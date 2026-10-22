@@ -8,52 +8,25 @@
   width: 839px;
 }
 
-.title {
-  color: #1b2430;
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 18px;
-}
-
-.description {
-  margin-top: 10px;
-  color: #5b6675;
-  font-size: 11px;
-  font-weight: normal;
-  line-height: 11px;
+.nowrap {
   white-space: nowrap;
 }
 
 .sampleBadge {
+  --sample-badge-padding-inline: 6px;
   position: absolute;
   top: 10px;
   right: 2px;
-  height: 20px;
-  padding: 0 6px;
-  border-radius: 10px;
-  background: #fef0cf;
-  color: #864704;
-  font-size: 9px;
-  font-weight: normal;
-  line-height: 20px;
-  white-space: nowrap;
 }
 
 .listCard {
   width: 839px;
   margin-top: 22px;
   padding: 21px 18px 22px;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px #dee4ea;
 }
 
 .listHeading {
   margin-bottom: 19px;
-  color: #1b2430;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 12px;
 }
 
 .filters {
@@ -75,98 +48,20 @@
   margin-left: 9px;
 }
 
-.label {
-  display: block;
-  margin-bottom: 8px;
-  color: #1b2430;
-  font-size: 10px;
-  font-weight: bold;
-  line-height: 10px;
-}
-
-.searchInput,
-.select,
-.searchButton {
-  font-family: inherit;
-  font-weight: normal;
-}
-
-.searchInput,
-.select {
-  display: block;
-  width: 100%;
-  height: 32px;
-  border: 1px solid #919ca8;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #1b2430;
-  font-size: 10px;
-  line-height: 30px;
-}
-
 .searchInput {
-  padding: 0 8px 0 11px;
+  --text-input-line-height: 30px;
+  --text-input-padding: 0px 8px 0px 11px;
+  width: 100%;
 }
 
-.searchInput::placeholder {
-  color: #757575;
-  opacity: 1;
-}
-
-.select {
-  padding: 0 8px 0 14px;
+.full {
+  width: 100%;
 }
 
 .searchButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  --button-padding-inline: 0px;
   width: 51px;
-  height: 32px;
   margin-left: 9px;
-  border: 0;
-  border-radius: 6px;
-  background: #2b4c9b;
-  color: #ffffff;
-  font-size: 11px;
-  line-height: 11px;
-}
-
-.table {
-  margin-top: 0;
-}
-
-.headRow,
-.dataRow {
-  display: grid;
-  grid-template-columns: 117px 172px 99px 99px 135px 99px 82px;
-  align-items: center;
-  border-bottom: 1px solid #e0e3e8;
-}
-
-.headRow {
-  height: 39px;
-  background: #ffffff;
-  color: #5b6675;
-  font-size: 9px;
-  font-weight: bold;
-  line-height: 9px;
-}
-
-.dataRow {
-  height: 55px;
-  color: #1b2430;
-  font-size: 10px;
-  font-weight: normal;
-  line-height: 10px;
-}
-
-.cell,
-.progressCell {
-  min-width: 0;
-  padding-left: 9px;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 .nameCell {
@@ -178,51 +73,10 @@
   align-items: center;
 }
 
-.track {
-  width: 93px;
-  height: 6px;
-  flex: 0 0 93px;
-  overflow: hidden;
-  border-radius: 2px;
-  background: #e6ebf1;
-}
-
-.fill {
-  display: block;
-  height: 6px;
-  border-radius: 2px;
-  background: #2b4c9b;
-}
-
 .percent {
   margin-left: auto;
 }
 
-.statusBadge {
-  display: inline-block;
-  height: 15px;
-  padding: 0 6px;
-  border-radius: 8px;
-  font-size: 9px;
-  font-weight: bold;
-  line-height: 15px;
-  white-space: nowrap;
-}
-
-.badgeActive {
-  background: #e9edf8;
-  color: #1f3e70;
-}
-
-.badgeSuspended {
-  background: #fff0dd;
-  color: #834a05;
-}
-
 .count {
-  margin-top: 12px;
-  color: #5b6675;
-  font-size: 9px;
-  font-weight: normal;
-  line-height: 9px;
+  --list-count-margin-top: 12px;
 }

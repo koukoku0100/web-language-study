@@ -1,18 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import { formatMonthDay, formatYearMonthDay } from "@/features/calendar-date/calendarDate";
 import { useAppSelector } from "@/store/hooks";
+import { Button } from "@/components/button/Button";
+import { Card } from "@/components/card/Card";
+import { CardHeading } from "@/components/card-heading/CardHeading";
+import { DataTableCell, DataTableHeader, DataTableRow } from "@/components/data-table/DataTable";
+import { FieldLabel } from "@/components/field/FieldLabel";
+import { SelectField } from "@/components/field/SelectField";
+import { TextInput } from "@/components/field/TextInput";
+import { ListCount } from "@/components/list-count/ListCount";
+import { PageTitle } from "@/components/page-title/PageTitle";
+import { ProgressBar } from "@/components/progress-bar/ProgressBar";
+import { SampleBadge } from "@/components/sample-badge/SampleBadge";
+import { StatusBadge } from "@/components/status-badge/StatusBadge";
 import styles from "./LearnerAdminView.module.css";
 
-function statusBadge(status: string) {
-  if (status === "active") {
-    return { label: "利用中", className: styles.badgeActive };
-  }
-  if (status === "suspended") {
-    return { label: "停止中", className: styles.badgeSuspended };
-  }
-  return null;
-}
+const LEARNER_COLUMNS = "117px 172px 99px 99px 135px 99px 82px";
 
 export function LearnerAdminView() {
   const learnerAdmin = useAppSelector((state) => state.learnerAdmin);
@@ -23,110 +28,81 @@ export function LearnerAdminView() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <div>
-          <h1 className={styles.title}>{learnerAdmin.title}</h1>
-          <p className={styles.description}>{learnerAdmin.description}</p>
-        </div>
-        {learnerAdmin.showSampleDataBadge ? <p className={styles.sampleBadge}>サンプルデータ</p> : null}
+        <PageTitle
+          title={learnerAdmin.title}
+          description={learnerAdmin.description}
+          descriptionClassName={styles.nowrap}
+        />
+        {learnerAdmin.showSampleDataBadge ? <SampleBadge className={styles.sampleBadge} /> : null}
       </header>
 
-      <section className={styles.listCard}>
-        <h2 className={styles.listHeading}>学習者一覧</h2>
+      <Card className={styles.listCard}>
+        <CardHeading className={styles.listHeading}>学習者一覧</CardHeading>
         <div className={styles.filters}>
           <div className={styles.filterSearch}>
-            <label className={styles.label} htmlFor="WELG0140-search">
-              検索
-            </label>
-            <input
+            <FieldLabel htmlFor="WELG0140-search">検索</FieldLabel>
+            <TextInput
               id="WELG0140-search"
               className={styles.searchInput}
-              type="text"
               value={searchText}
               placeholder={learnerAdmin.searchPlaceholder}
-              onChange={(event) => {
-                setSearchText(event.target.value);
-              }}
+              onChange={setSearchText}
             />
           </div>
           <div className={styles.filterNative}>
-            <label className={styles.label} htmlFor="WELG0140-native-language">
-              母語
-            </label>
-            <select
+            <FieldLabel htmlFor="WELG0140-native-language">母語</FieldLabel>
+            <SelectField
               id="WELG0140-native-language"
-              className={styles.select}
+              className={styles.full}
               value={nativeLanguageId}
-              onChange={(event) => {
-                setNativeLanguageId(event.target.value);
-              }}
-            >
-              {learnerAdmin.nativeLanguageOptions.map((option) => (
-                <option key={option.id} value={option.id}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              options={learnerAdmin.nativeLanguageOptions}
+              onChange={setNativeLanguageId}
+            />
           </div>
           <div className={styles.filterStatus}>
-            <label className={styles.label} htmlFor="WELG0140-status">
-              状態
-            </label>
-            <select
+            <FieldLabel htmlFor="WELG0140-status">状態</FieldLabel>
+            <SelectField
               id="WELG0140-status"
-              className={styles.select}
+              className={styles.full}
               value={statusId}
-              onChange={(event) => {
-                setStatusId(event.target.value);
-              }}
-            >
-              {learnerAdmin.statusOptions.map((option) => (
-                <option key={option.id} value={option.id}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              options={learnerAdmin.statusOptions}
+              onChange={setStatusId}
+            />
           </div>
-          <button type="button" className={styles.searchButton}>
+          <Button variant="primary" className={styles.searchButton} onClick={() => {}}>
             検索
-          </button>
+          </Button>
         </div>
 
-        <div className={styles.table}>
-          <div className={styles.headRow}>
-            <span className={styles.cell}>ユーザー名</span>
-            <span className={styles.cell}>メールアドレス</span>
-            <span className={styles.cell}>母語</span>
-            <span className={styles.cell}>登録日</span>
-            <span className={styles.cell}>学習の進み具合</span>
-            <span className={styles.cell}>最終学習日</span>
-            <span className={styles.cell}>状態</span>
-          </div>
-          {learnerAdmin.learners.map((learner) => {
-            const badge = statusBadge(learner.status);
-            return (
-              <div key={learner.id} className={styles.dataRow}>
-                <span className={`${styles.cell} ${styles.nameCell}`}>{learner.name}</span>
-                <span className={styles.cell}>{learner.email}</span>
-                <span className={styles.cell}>{learner.nativeLanguage}</span>
-                <span className={styles.cell}>{learner.registeredOn}</span>
-                <span className={styles.progressCell}>
-                  <span className={styles.track}>
-                    <span className={styles.fill} style={{ width: `${learner.progressRate}%` }} />
-                  </span>
-                  <span className={styles.percent}>{learner.progressRate}%</span>
-                </span>
-                <span className={styles.cell}>{learner.lastStudiedOn}</span>
-                <span className={styles.cell}>
-                  {badge ? <span className={`${styles.statusBadge} ${badge.className}`}>{badge.label}</span> : null}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-        {learnerAdmin.learners.length > 0 ? (
-          <p className={styles.count}>1〜{learnerAdmin.learners.length}件を表示</p>
-        ) : null}
-      </section>
+        <DataTableHeader style={{ gridTemplateColumns: LEARNER_COLUMNS }}>
+          <DataTableCell>ユーザー名</DataTableCell>
+          <DataTableCell>メールアドレス</DataTableCell>
+          <DataTableCell>母語</DataTableCell>
+          <DataTableCell>登録日</DataTableCell>
+          <DataTableCell>学習の進み具合</DataTableCell>
+          <DataTableCell>最終学習日</DataTableCell>
+          <DataTableCell>状態</DataTableCell>
+        </DataTableHeader>
+        {learnerAdmin.learners.map((learner) => (
+          <DataTableRow key={learner.id} style={{ gridTemplateColumns: LEARNER_COLUMNS }}>
+            <DataTableCell className={styles.nameCell}>{learner.name}</DataTableCell>
+            <DataTableCell>{learner.email}</DataTableCell>
+            <DataTableCell>{learner.nativeLanguage}</DataTableCell>
+            <DataTableCell>{formatYearMonthDay(learner.registeredOn)}</DataTableCell>
+            <DataTableCell className={styles.progressCell}>
+              <ProgressBar variant="fixed" rate={learner.progressRate} />
+              <span className={styles.percent}>{learner.progressRate}%</span>
+            </DataTableCell>
+            <DataTableCell>{formatMonthDay(learner.lastStudiedOn)}</DataTableCell>
+            <DataTableCell>
+              {learner.status === "active" || learner.status === "suspended" ? (
+                <StatusBadge tone={learner.status} />
+              ) : null}
+            </DataTableCell>
+          </DataTableRow>
+        ))}
+        <ListCount count={learnerAdmin.learners.length} className={styles.count} />
+      </Card>
     </div>
   );
 }

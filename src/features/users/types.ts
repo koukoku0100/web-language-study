@@ -1,3 +1,5 @@
+import type { CalendarDate } from "@/features/calendar-date/calendarDate";
+
 export type AccountStatus = "active" | "suspended";
 
 export type SelectOption = {
@@ -10,9 +12,9 @@ export type Learner = {
   name: string;
   email: string;
   nativeLanguage: string;
-  registeredOn: string;
+  registeredOn: CalendarDate;
   progressRate: number;
-  lastStudiedOn: string;
+  lastStudiedOn: CalendarDate;
   status: AccountStatus;
 };
 

@@ -8,63 +8,31 @@
   width: 839px;
 }
 
-.title {
-  color: #1b2430;
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 18px;
-}
-
-.description {
-  margin-top: 10px;
-  color: #5b6675;
-  font-size: 11px;
-  font-weight: normal;
-  line-height: 11px;
+.nowrap {
   white-space: nowrap;
 }
 
 .sampleBadge {
+  --sample-badge-padding-inline: 4px;
+  --sample-badge-color: #834606;
   position: absolute;
   top: 10px;
   right: 4px;
-  height: 20px;
-  padding: 0 4px;
-  border-radius: 10px;
-  background: #fef0cf;
-  color: #834606;
-  font-size: 9px;
-  font-weight: normal;
-  line-height: 20px;
-  white-space: nowrap;
-}
-
-.permissionCard,
-.accountCard {
-  width: 839px;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px #dee4ea;
 }
 
 .permissionCard {
+  width: 839px;
   margin-top: 24px;
   padding: 20px 18px 19px;
 }
 
 .accountCard {
+  width: 839px;
   margin-top: 20px;
   padding: 17px 18px 20px;
 }
 
-.cardHeading {
-  color: #1b2430;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 12px;
-}
-
-.permissionCard .cardHeading {
+.permissionHeading {
   margin-bottom: 10px;
 }
 
@@ -81,105 +49,39 @@
   align-items: center;
 }
 
-.addButton,
-.editButton {
-  font-family: inherit;
-  font-weight: bold;
-}
-
 .addButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  --button-padding-inline: 0px;
+  --button-font-weight: 700;
   width: 93px;
-  height: 32px;
   margin-left: auto;
   margin-right: 1px;
-  border: 0;
-  border-radius: 6px;
-  background: #2b4c9b;
-  color: #ffffff;
-  font-size: 11px;
-  line-height: 11px;
-}
-
-.permissionHead,
-.permissionRow,
-.accountHead,
-.accountRow {
-  display: grid;
-  align-items: center;
-  border-bottom: 1px solid #e9eaec;
-  background: #ffffff;
-}
-
-.permissionHead,
-.permissionRow {
-  grid-template-columns: 346px 149px 149px 159px;
-}
-
-.accountHead,
-.accountRow {
-  grid-template-columns: 175px 259px 203px 84px 82px;
-}
-
-.permissionHead,
-.accountHead {
-  align-items: start;
-  color: #5b6675;
-  font-size: 9px;
-  font-weight: bold;
-  line-height: 9px;
 }
 
 .permissionHead {
-  height: 39px;
-  padding-top: 21px;
-}
-
-.accountHead {
-  height: 40px;
-  padding-top: 21px;
+  --table-header-align: start;
+  --table-header-padding-top: 21px;
+  --table-divider-color: #e9eaec;
 }
 
 .permissionRow {
-  height: 52px;
-  color: #1b2430;
-  font-size: 10px;
-  font-weight: normal;
-  line-height: 10px;
+  --table-row-height: 52px;
+  --table-divider-color: #e9eaec;
+}
+
+.accountHead {
+  --table-header-height: 40px;
+  --table-header-align: start;
+  --table-header-padding-top: 21px;
+  --table-divider-color: #e9eaec;
 }
 
 .accountRow {
-  height: 55px;
-  color: #1b2430;
-  font-size: 10px;
-  font-weight: normal;
-  line-height: 10px;
-}
-
-.cell {
-  min-width: 0;
-  padding-left: 9px;
-  overflow: hidden;
-  white-space: nowrap;
+  --table-divider-color: #e9eaec;
 }
 
 .actionCell,
 .nameCell {
   font-weight: bold;
-}
-
-.allowedBadge {
-  display: inline-block;
-  height: 17px;
-  padding: 0 9px;
-  border-radius: 8px;
-  background: #e9edf8;
-  color: #1f3a76;
-  font-size: 9px;
-  font-weight: normal;
-  line-height: 17px;
 }
 
 .deniedMark {
@@ -189,37 +91,20 @@
   line-height: 9px;
 }
 
-.statusBadge {
-  display: inline-block;
-  height: 15px;
-  padding: 0 8px;
-  border-radius: 8px;
-  font-size: 9px;
-  font-weight: bold;
-  line-height: 15px;
-  white-space: nowrap;
-}
-
 .badgeActive {
-  background: #e9edf8;
-  color: #253771;
+  --status-badge-color: #253771;
+  --status-badge-padding-inline: 8px;
 }
 
 .badgeSuspended {
-  background: #fef0dc;
-  color: #884a03;
+  --status-badge-background: #fef0dc;
+  --status-badge-color: #884a03;
+  --status-badge-padding-inline: 8px;
 }
 
 .editButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  --button-padding-inline: 0px;
+  --button-font-size: 10px;
+  --button-font-weight: 700;
   width: 44px;
-  height: 32px;
-  border: 1px solid #919ca8;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #1b2430;
-  font-size: 10px;
-  line-height: 10px;
 }

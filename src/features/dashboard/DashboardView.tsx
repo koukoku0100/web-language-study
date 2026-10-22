@@ -2,13 +2,26 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
+import { formatMonthDay } from "@/features/calendar-date/calendarDate";
+import type { MetricCard } from "@/features/dashboard/types";
 import { useAppSelector } from "@/store/hooks";
+import { Button } from "@/components/button/Button";
+import { Card } from "@/components/card/Card";
+import { CardHeading } from "@/components/card-heading/CardHeading";
+import { PageTitle } from "@/components/page-title/PageTitle";
+import { ProgressBar } from "@/components/progress-bar/ProgressBar";
+import { SampleBadge } from "@/components/sample-badge/SampleBadge";
 import styles from "./DashboardView.module.css";
 
 const CONTENT_WIDTH_AT_1080 = 838;
 const LOWER_LEFT_AT_1080 = 491;
 const LOWER_RIGHT_AT_1080 = 327;
 const LOWER_RATIO_TOTAL = LOWER_LEFT_AT_1080 + LOWER_RIGHT_AT_1080;
+
+function formatMetricValue(metric: MetricCard) {
+  const text = String(metric.value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return metric.valueKind === "percent" ? `${text}%` : text;
+}
 
 function metricWidths(count: number, inner: number, viewport: number): number[] {
   if (count === 0 || inner <= 0) {
@@ -88,35 +101,26 @@ export function DashboardView() {
   return (
     <div className={styles.content} ref={contentRef}>
       <header className={styles.header}>
-        <div>
-          <h1 className={styles.title}>{dashboard.title}</h1>
-          <p className={styles.description}>{dashboard.description}</p>
-        </div>
-        {dashboard.showSampleDataBadge ? (
-          <p className={styles.badge}>サンプルデータ</p>
-        ) : null}
+        <PageTitle title={dashboard.title} description={dashboard.description} />
+        {dashboard.showSampleDataBadge ? <SampleBadge className={styles.sampleBadge} /> : null}
       </header>
 
       <div className={styles.metrics} style={metricsStyle}>
         {dashboard.metrics.map((metric, index) => (
-          <section
-            key={metric.id}
-            className={styles.metric}
-            style={{ width: cardWidths[index] }}
-          >
-            <p className={styles.metricLabel}>{metric.label}</p>
-            <p className={styles.metricValue}>{metric.valueText}</p>
-            <p className={styles.metricNote}>{metric.note}</p>
-          </section>
+          <div key={metric.id} className={styles.metric} style={{ width: cardWidths[index] }}>
+            <Card className={styles.metricCard}>
+              <p className={styles.metricLabel}>{metric.label}</p>
+              <p className={styles.metricValue}>{formatMetricValue(metric)}</p>
+              <p className={styles.metricNote}>{metric.note}</p>
+            </Card>
+          </div>
         ))}
       </div>
 
       <div className={lower.stacked ? `${styles.lower} ${styles.lowerStacked}` : styles.lower}>
-        <section
-          className={styles.card}
-          style={lower.stacked ? undefined : { width: lower.left }}
-        >
-          <h2 className={styles.cardTitle}>コース別の学習進捗</h2>
+        <div className={styles.lowerItem} style={lower.stacked ? undefined : { width: lower.left }}>
+        <Card className={styles.card}>
+          <CardHeading className={styles.cardTitle}>コース別の学習進捗</CardHeading>
           {dashboard.courseProgresses.map((course) => (
             <div key={course.id} className={styles.courseRow}>
               <div className={styles.courseTop}>
@@ -126,38 +130,35 @@ export function DashboardView() {
                   <span>{course.progressRate}%</span>
                 </p>
               </div>
-              <div className={styles.track}>
-                <div
-                  className={styles.fill}
-                  style={{ width: `${course.progressRate}%` }}
-                />
+              <div className={styles.trackSlot}>
+                <ProgressBar variant="fluid" rate={course.progressRate} />
               </div>
               <p className={styles.courseMeta}>
                 {course.lessonCount}レッスン ・ 受講中 {course.activeLearnerCount}名
               </p>
             </div>
           ))}
-        </section>
+        </Card>
+        </div>
 
-        <section
-          className={styles.card}
-          style={lower.stacked ? undefined : { width: lower.right }}
-        >
-          <h2 className={`${styles.cardTitle} ${styles.pendingTitle}`}>公開待ちのレッスン</h2>
+        <div className={styles.lowerItem} style={lower.stacked ? undefined : { width: lower.right }}>
+        <Card className={styles.card}>
+          <CardHeading className={`${styles.cardTitle} ${styles.pendingTitle}`}>公開待ちのレッスン</CardHeading>
           {dashboard.pendingLessons.map((lesson) => (
             <div key={lesson.id} className={styles.pendingRow}>
               <div className={styles.pendingText}>
                 <p className={styles.lessonTitle}>{lesson.title}</p>
                 <p className={styles.lessonMeta}>
-                  {lesson.courseName} ・ {lesson.updatedOn} 更新 ・ {lesson.editorName}
+                  {lesson.courseName} ・ {formatMonthDay(lesson.updatedOn)} 更新 ・ {lesson.editorName}
                 </p>
-                <button type="button" className={styles.edit}>
+                <Button variant="secondary" className={styles.edit} onClick={() => {}}>
                   編集
-                </button>
+                </Button>
               </div>
             </div>
           ))}
-        </section>
+        </Card>
+        </div>
       </div>
     </div>
   );

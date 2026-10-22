@@ -1,6 +1,11 @@
-export type LessonStatus = "published" | "draft" | "private";
+import type { CalendarDate } from "@/features/calendar-date/calendarDate";
+import type { LessonStatus } from "@/features/lesson-status/lessonStatus";
+
+export type { LessonStatus };
 
 export type QuestionFormat = "multiple_choice" | "fill_in_blank";
+
+export type QuestionStatusFilter = LessonStatus | "all";
 
 export type SelectOption = {
   id: string;
@@ -14,7 +19,7 @@ export type QuestionListItem = {
   lessonName: string;
   format: QuestionFormat;
   status: LessonStatus;
-  updatedOn: string;
+  updatedOn: CalendarDate;
   selected: boolean;
 };
 
@@ -40,8 +45,7 @@ export type QuestionBankState = {
   selectedCourseId: string;
   formatOptions: SelectOption[];
   selectedFormatId: string;
-  statusOptions: SelectOption[];
-  selectedStatusId: string;
+  selectedStatusId: QuestionStatusFilter;
   questions: QuestionListItem[];
   questionDraft: QuestionDraft;
 };

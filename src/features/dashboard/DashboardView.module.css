@@ -10,32 +10,10 @@
   gap: 16px;
 }
 
-.title {
-  color: #1b2430;
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 18px;
-}
-
-.description {
-  margin-top: 10px;
-  color: #5b6675;
-  font-size: 11px;
-  font-weight: normal;
-  line-height: 11px;
-}
-
-.badge {
+.sampleBadge {
+  --sample-badge-padding-inline: 10px;
+  --sample-badge-font-weight: 700;
   flex: 0 0 auto;
-  height: 20px;
-  padding: 0 10px;
-  border-radius: 10px;
-  background: #fef0cf;
-  color: #864704;
-  font-size: 9px;
-  font-weight: bold;
-  line-height: 20px;
-  white-space: nowrap;
 }
 
 .metrics {
@@ -46,11 +24,11 @@
 
 .metric {
   flex: 0 0 auto;
+}
+
+.metricCard {
   height: 97px;
   padding: 17px 15px 18px;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px #dee4ea;
 }
 
 .metricLabel {
@@ -87,23 +65,20 @@
   flex-direction: column;
 }
 
-.lowerStacked .card {
+.lowerItem {
+  flex: 0 0 auto;
+}
+
+.lowerStacked .lowerItem {
   width: 100%;
 }
 
 .card {
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px #dee4ea;
   padding: 21px 17px 21px 18px;
 }
 
 .cardTitle {
   margin-bottom: 22px;
-  color: #1b2430;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 12px;
 }
 
 .pendingTitle {
@@ -137,15 +112,8 @@
   gap: 2px;
 }
 
-.track {
-  height: 6px;
+.trackSlot {
   margin-top: 10px;
-  background: #dfeeff;
-}
-
-.fill {
-  height: 6px;
-  background: #2b4c9b;
 }
 
 .courseMeta {
@@ -196,22 +164,13 @@
 }
 
 .edit {
+  --button-height: 34px;
+  --button-padding-inline: 0px;
+  --button-font-size: 10px;
+  --button-font-weight: 700;
   position: absolute;
   top: 50%;
   right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 45px;
-  height: 34px;
-  padding: 0;
-  border: 1px solid #919ca8;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #1b2430;
-  font-family: inherit;
-  font-size: 10px;
-  font-weight: bold;
-  line-height: 10px;
   transform: translateY(-50%);
 }

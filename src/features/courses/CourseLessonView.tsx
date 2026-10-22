@@ -1,22 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAppSelector } from "@/store/hooks";
-import type { LessonStatus } from "./types";
+import { Button } from "@/components/button/Button";
+import { Card } from "@/components/card/Card";
+import { CardHeading } from "@/components/card-heading/CardHeading";
+import { FieldLabel } from "@/components/field/FieldLabel";
+import { SelectField } from "@/components/field/SelectField";
+import { TextArea } from "@/components/field/TextArea";
+import { TextInput } from "@/components/field/TextInput";
+import { PageTitle } from "@/components/page-title/PageTitle";
+import { SampleBadge } from "@/components/sample-badge/SampleBadge";
+import { StatusBadge } from "@/components/status-badge/StatusBadge";
+import { isLessonStatus, lessonStatusOptions } from "@/features/lesson-status/lessonStatus";
+import type { LessonStatus } from "@/features/lesson-status/lessonStatus";
 import styles from "./CourseLessonView.module.css";
-
-const STATUS_BADGE: Record<LessonStatus, { label: string; className: string }> = {
-  published: { label: "公開", className: styles.badgePublished },
-  draft: { label: "下書き", className: styles.badgeDraft },
-  private: { label: "非公開", className: styles.badgePrivate },
-};
-
-function statusBadge(status: string) {
-  if (status === "published" || status === "draft" || status === "private") {
-    return STATUS_BADGE[status];
-  }
-  return null;
-}
 
 export function CourseLessonView() {
   const courseLesson = useAppSelector((state) => state.courseLesson);
@@ -24,173 +22,170 @@ export function CourseLessonView() {
   const [courseId, setCourseId] = useState(courseLesson.selectedCourseId);
   const [lessonName, setLessonName] = useState(draftSource.lessonName);
   const [videoUrl, setVideoUrl] = useState(draftSource.videoUrl);
-  const [publishStatusId, setPublishStatusId] = useState(draftSource.publishStatusId);
-  const [displayOrder, setDisplayOrder] = useState(draftSource.displayOrder);
+  const [publishStatusId, setPublishStatusId] = useState<LessonStatus>(draftSource.publishStatusId);
+  const [displayOrder, setDisplayOrder] = useState<number | null>(draftSource.displayOrder);
+  const [displayOrderText, setDisplayOrderText] = useState<string | null>(null);
+  const displayOrderComposing = useRef(false);
   const [description, setDescription] = useState(draftSource.description);
+
+  function applyDisplayOrder(value: string) {
+    const digits = value.replace(/\D/g, "");
+    setDisplayOrder(digits.length === 0 ? null : Number(digits));
+    setDisplayOrderText(null);
+  }
+
+  function changeDisplayOrder(value: string) {
+    if (displayOrderComposing.current) {
+      setDisplayOrderText(value);
+      return;
+    }
+    applyDisplayOrder(value);
+  }
 
   return (
     <div className={styles.scroll}>
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <div>
-          <h1 className={styles.title}>{courseLesson.title}</h1>
-          <p className={styles.description}>{courseLesson.description}</p>
-        </div>
-        <div className={styles.headerActions}>
-          {courseLesson.showSampleDataBadge ? <p className={styles.sampleBadge}>サンプルデータ</p> : null}
-          <button type="button" className={styles.primaryButton}>
-            コースを追加
-          </button>
-        </div>
-      </header>
-
-      <div className={styles.columns}>
-        <section className={styles.listCard}>
-          <h2 className={styles.listHeading}>レッスン一覧</h2>
-          <label className={styles.label} htmlFor="WELG0120-course">
-            コース
-          </label>
-          <select
-            id="WELG0120-course"
-            className={styles.select}
-            value={courseId}
-            onChange={(event) => {
-              setCourseId(event.target.value);
-            }}
-          >
-            {courseLesson.courseOptions.map((option) => (
-              <option key={option.id} value={option.id}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <div className={styles.lessonList}>
-            {courseLesson.lessons.map((lesson) => {
-              const badge = statusBadge(lesson.status);
-              return (
-                <div
-                  key={lesson.id}
-                  className={lesson.selected ? `${styles.lessonRow} ${styles.lessonRowSelected}` : styles.lessonRow}
-                >
-                  <span className={styles.orderNumber}>{lesson.orderNumber}</span>
-                  <span className={styles.lessonName}>{lesson.name}</span>
-                  {badge ? <span className={`${styles.statusBadge} ${badge.className}`}>{badge.label}</span> : null}
-                </div>
-              );
-            })}
-          </div>
-          <button type="button" className={styles.addLesson}>
-            レッスンを追加
-          </button>
-        </section>
-
-        <section className={styles.editCard}>
-          <h2 className={styles.editHeading}>レッスンを編集</h2>
-          <label className={styles.label} htmlFor="WELG0120-lesson-name">
-            レッスン名
-          </label>
-          <input
-            id="WELG0120-lesson-name"
-            className={styles.input}
-            type="text"
-            value={lessonName}
-            onChange={(event) => {
-              setLessonName(event.target.value);
-            }}
+      <div className={styles.page}>
+        <header className={styles.header}>
+          <PageTitle
+            title={courseLesson.title}
+            description={courseLesson.description}
+            descriptionClassName={styles.nowrap}
           />
-
-          <label className={`${styles.label} ${styles.followingLabel}`} htmlFor="WELG0120-video-url">
-            動画URL（YouTube）
-          </label>
-          <input
-            id="WELG0120-video-url"
-            className={`${styles.input} ${styles.videoInput}`}
-            type="text"
-            value={videoUrl}
-            placeholder="https://www.youtube.com/watch?v="
-            onChange={(event) => {
-              setVideoUrl(event.target.value);
-            }}
-          />
-          <p className={styles.note}>URLを入力すると、アプリの学習画面に動画が埋め込まれます。</p>
-          <div className={styles.preview}>
-            <svg className={styles.play} width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
-              <path d="M9 6.5v13l11-6.5-11-6.5z" />
-            </svg>
-            <p className={styles.previewText}>動画プレビュー（URL入力後に表示）</p>
+          <div className={styles.headerActions}>
+            {courseLesson.showSampleDataBadge ? <SampleBadge /> : null}
+            <Button variant="primary" onClick={() => {}}>
+              コースを追加
+            </Button>
           </div>
+        </header>
 
-          <div className={styles.split}>
-            <div>
-              <label className={styles.label} htmlFor="WELG0120-publish-status">
-                公開状態
-              </label>
-              <select
-                id="WELG0120-publish-status"
-                className={`${styles.select} ${styles.publishSelect}`}
-                value={publishStatusId}
-                onChange={(event) => {
-                  setPublishStatusId(event.target.value);
-                }}
-              >
-                {courseLesson.publishStatusOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+        <div className={styles.columns}>
+          <Card className={styles.listCard}>
+            <CardHeading className={styles.listHeading}>レッスン一覧</CardHeading>
+            <FieldLabel htmlFor="WELG0120-course">コース</FieldLabel>
+            <SelectField
+              id="WELG0120-course"
+              className={styles.full}
+              value={courseId}
+              options={courseLesson.courseOptions.map((course) => ({
+                id: course.id,
+                label: `${course.courseName}（${course.lessonCount}レッスン）`,
+              }))}
+              onChange={setCourseId}
+            />
+            <div className={styles.lessonList}>
+              {courseLesson.lessons.map((lesson) => {
+                return (
+                  <div
+                    key={lesson.id}
+                    className={lesson.selected ? `${styles.lessonRow} ${styles.lessonRowSelected}` : styles.lessonRow}
+                  >
+                    <span className={styles.orderNumber}>{lesson.orderNumber}</span>
+                    <span className={styles.lessonName}>{lesson.name}</span>
+                    <StatusBadge tone={lesson.status} className={styles.lessonBadge} />
+                  </div>
+                );
+              })}
             </div>
-            <div>
-              <label className={styles.label} htmlFor="WELG0120-display-order">
-                表示順
-              </label>
-              <input
-                id="WELG0120-display-order"
-                className={styles.input}
-                type="text"
-                value={displayOrder}
-                onChange={(event) => {
-                  setDisplayOrder(event.target.value);
-                }}
-              />
+            <Button variant="secondary" className={styles.addLesson} onClick={() => {}}>
+              レッスンを追加
+            </Button>
+          </Card>
+
+          <Card className={styles.editCard}>
+            <CardHeading className={styles.editHeading}>レッスンを編集</CardHeading>
+            <FieldLabel htmlFor="WELG0120-lesson-name">レッスン名</FieldLabel>
+            <TextInput
+              id="WELG0120-lesson-name"
+              className={styles.full}
+              value={lessonName}
+              onChange={setLessonName}
+            />
+
+            <FieldLabel className={styles.followingLabel} htmlFor="WELG0120-video-url">
+              動画URL（YouTube）
+            </FieldLabel>
+            <TextInput
+              id="WELG0120-video-url"
+              className={styles.full}
+              value={videoUrl}
+              placeholder="https://www.youtube.com/watch?v="
+              onChange={setVideoUrl}
+            />
+            <p className={styles.note}>URLを入力すると、アプリの学習画面に動画が埋め込まれます。</p>
+            <div className={styles.preview}>
+              <svg className={styles.play} width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+                <path d="M9 6.5v13l11-6.5-11-6.5z" />
+              </svg>
+              <p className={styles.previewText}>動画プレビュー（URL入力後に表示）</p>
             </div>
-          </div>
 
-          <label className={`${styles.label} ${styles.followingLabel}`} htmlFor="WELG0120-description">
-            レッスンの説明
-          </label>
-          <textarea
-            id="WELG0120-description"
-            className={styles.textarea}
-            rows={4}
-            value={description}
-            onChange={(event) => {
-              setDescription(event.target.value);
-            }}
-          />
+            <div className={styles.split}>
+              <div>
+                <FieldLabel htmlFor="WELG0120-publish-status">公開状態</FieldLabel>
+                <SelectField
+                  id="WELG0120-publish-status"
+                  className={styles.narrow}
+                  value={publishStatusId}
+                  options={lessonStatusOptions()}
+                  onChange={(value) => {
+                    if (isLessonStatus(value)) {
+                      setPublishStatusId(value);
+                    }
+                  }}
+                />
+              </div>
+              <div>
+                <FieldLabel htmlFor="WELG0120-display-order">表示順</FieldLabel>
+                <TextInput
+                  id="WELG0120-display-order"
+                  className={styles.narrow}
+                  value={displayOrderText !== null ? displayOrderText : displayOrder === null ? "" : String(displayOrder)}
+                  onCompositionStart={(value) => {
+                    displayOrderComposing.current = true;
+                    setDisplayOrderText(value);
+                  }}
+                  onCompositionEnd={(value) => {
+                    displayOrderComposing.current = false;
+                    applyDisplayOrder(value);
+                  }}
+                  onChange={changeDisplayOrder}
+                />
+              </div>
+            </div>
 
-          <p className={`${styles.label} ${styles.linkLabel}`}>紐づく問題集</p>
-          <div className={styles.linkRow}>
-            {draftSource.linkedQuestionSets.map((set) => (
-              <span key={set.id} className={styles.questionBadge}>
-                {set.label}
-              </span>
-            ))}
-            <button type="button" className={styles.linkButton}>
-              問題集を紐づける
-            </button>
-          </div>
-          <div className={styles.footerActions}>
-            <button type="button" className={styles.secondaryButton}>
-              下書きとして保存
-            </button>
-            <button type="button" className={`${styles.primaryButton} ${styles.publishButton}`}>
-              公開する
-            </button>
-          </div>
-        </section>
+            <FieldLabel className={styles.followingLabel} htmlFor="WELG0120-description">
+              レッスンの説明
+            </FieldLabel>
+            <TextArea
+              id="WELG0120-description"
+              className={styles.textarea}
+              value={description}
+              onChange={setDescription}
+            />
+
+            <FieldLabel className={styles.linkLabel}>紐づく問題集</FieldLabel>
+            <div className={styles.linkRow}>
+              {draftSource.linkedQuestionSets.map((set) => (
+                <span key={set.id} className={styles.questionBadge}>
+                  {set.label}
+                </span>
+              ))}
+              <Button variant="secondary" className={styles.linkButton} onClick={() => {}}>
+                問題集を紐づける
+              </Button>
+            </div>
+            <div className={styles.footerActions}>
+              <Button variant="secondary" className={styles.boldButton} onClick={() => {}}>
+                下書きとして保存
+              </Button>
+              <Button variant="primary" className={styles.boldButton} onClick={() => {}}>
+                公開する
+              </Button>
+            </div>
+          </Card>
+        </div>
       </div>
-    </div>
     </div>
   );
 }

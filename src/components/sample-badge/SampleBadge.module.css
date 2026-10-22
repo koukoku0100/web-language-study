@@ -1,0 +1,11 @@
+.badge {
+  height: 20px;
+  padding: 0 var(--sample-badge-padding-inline, 9px);
+  border-radius: 10px;
+  background: #fef0cf;
+  color: var(--sample-badge-color, #864704);
+  font-size: 9px;
+  font-weight: var(--sample-badge-font-weight, 400);
+  line-height: 20px;
+  white-space: nowrap;
+}

@@ -12,7 +12,6 @@ const initialState: QuestionBankState = {
   selectedCourseId: "n5",
   formatOptions: [{ id: "all", label: "すべて" }],
   selectedFormatId: "all",
-  statusOptions: [{ id: "all", label: "すべて" }],
   selectedStatusId: "all",
   questions: [
     {
@@ -22,7 +21,7 @@ const initialState: QuestionBankState = {
       lessonName: "あいさつ",
       format: "multiple_choice",
       status: "published",
-      updatedOn: "10/09",
+      updatedOn: { year: 2026, month: 10, day: 9 },
       selected: false,
     },
     {
@@ -32,7 +31,7 @@ const initialState: QuestionBankState = {
       lessonName: "あいさつ",
       format: "multiple_choice",
       status: "published",
-      updatedOn: "10/09",
+      updatedOn: { year: 2026, month: 10, day: 9 },
       selected: false,
     },
     {
@@ -42,7 +41,7 @@ const initialState: QuestionBankState = {
       lessonName: "自己紹介",
       format: "fill_in_blank",
       status: "published",
-      updatedOn: "10/10",
+      updatedOn: { year: 2026, month: 10, day: 10 },
       selected: true,
     },
     {
@@ -52,7 +51,7 @@ const initialState: QuestionBankState = {
       lessonName: "自己紹介",
       format: "multiple_choice",
       status: "draft",
-      updatedOn: "10/11",
+      updatedOn: { year: 2026, month: 10, day: 11 },
       selected: false,
     },
     {
@@ -62,7 +61,7 @@ const initialState: QuestionBankState = {
       lessonName: "買い物のあいさつ",
       format: "multiple_choice",
       status: "draft",
-      updatedOn: "10/12",
+      updatedOn: { year: 2026, month: 10, day: 12 },
       selected: false,
     },
     {
@@ -72,7 +71,7 @@ const initialState: QuestionBankState = {
       lessonName: "買い物のあいさつ",
       format: "multiple_choice",
       status: "draft",
-      updatedOn: "10/12",
+      updatedOn: { year: 2026, month: 10, day: 12 },
       selected: false,
     },
   ],

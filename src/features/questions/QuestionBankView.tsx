@@ -2,18 +2,30 @@
 
 import { useState } from "react";
 import { useAppSelector } from "@/store/hooks";
-import type { LessonStatus, QuestionChoice, QuestionFormat } from "./types";
+import { Button } from "@/components/button/Button";
+import { Card } from "@/components/card/Card";
+import { CardHeading } from "@/components/card-heading/CardHeading";
+import { DataTableCell, DataTableHeader, DataTableRow } from "@/components/data-table/DataTable";
+import { FieldLabel } from "@/components/field/FieldLabel";
+import { SelectField } from "@/components/field/SelectField";
+import { TextArea } from "@/components/field/TextArea";
+import { TextInput } from "@/components/field/TextInput";
+import { ListCount } from "@/components/list-count/ListCount";
+import { PageTitle } from "@/components/page-title/PageTitle";
+import { SampleBadge } from "@/components/sample-badge/SampleBadge";
+import { StatusBadge } from "@/components/status-badge/StatusBadge";
+import { formatMonthDay } from "@/features/calendar-date/calendarDate";
+import { isLessonStatus, lessonStatusOptions } from "@/features/lesson-status/lessonStatus";
+import type { LessonStatus } from "@/features/lesson-status/lessonStatus";
+import type { QuestionChoice, QuestionFormat, QuestionStatusFilter } from "./types";
 import styles from "./QuestionBankView.module.css";
+
+const QUESTION_COLUMNS = "81px 351px 169px 73px 62px 66px";
+const QUESTION_STATUS_EXCLUDED: readonly LessonStatus[] = ["private"];
 
 const FORMAT_LABEL: Record<QuestionFormat, string> = {
   multiple_choice: "選択式",
   fill_in_blank: "穴埋め",
-};
-
-const STATUS_BADGE: Record<LessonStatus, { label: string; className: string }> = {
-  published: { label: "公開", className: styles.badgePublished },
-  draft: { label: "下書き", className: styles.badgeDraft },
-  private: { label: "非公開", className: styles.badgePrivate },
 };
 
 function formatLabel(format: string) {
@@ -23,11 +35,8 @@ function formatLabel(format: string) {
   return "";
 }
 
-function statusBadge(status: string) {
-  if (status === "published" || status === "draft" || status === "private") {
-    return STATUS_BADGE[status];
-  }
-  return null;
+function isQuestionStatusFilter(value: string): value is QuestionStatusFilter {
+  return value === "all" || isLessonStatus(value);
 }
 
 export function QuestionBankView() {
@@ -35,7 +44,7 @@ export function QuestionBankView() {
   const draftSource = questionBank.questionDraft;
   const [courseId, setCourseId] = useState(questionBank.selectedCourseId);
   const [formatId, setFormatId] = useState(questionBank.selectedFormatId);
-  const [statusId, setStatusId] = useState(questionBank.selectedStatusId);
+  const [statusId, setStatusId] = useState<QuestionStatusFilter>(questionBank.selectedStatusId);
   const [prompt, setPrompt] = useState(draftSource.prompt);
   const [explanation, setExplanation] = useState(draftSource.explanation);
   const [choices, setChoices] = useState<QuestionChoice[]>(() =>
@@ -60,151 +69,125 @@ export function QuestionBankView() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <div>
-          <h1 className={styles.title}>{questionBank.title}</h1>
-          <p className={styles.description}>{questionBank.description}</p>
-        </div>
+        <PageTitle
+          title={questionBank.title}
+          description={questionBank.description}
+          descriptionClassName={styles.nowrap}
+        />
         <div className={styles.headerActions}>
-          {questionBank.showSampleDataBadge ? <p className={styles.sampleBadge}>サンプルデータ</p> : null}
+          {questionBank.showSampleDataBadge ? <SampleBadge /> : null}
           <div className={styles.headerButtons}>
-            <button type="button" className={styles.secondaryButton}>
+            <Button variant="secondary" className={styles.headerButton} onClick={() => {}}>
               CSVで一括登録
-            </button>
-            <button type="button" className={styles.primaryButton}>
+            </Button>
+            <Button variant="primary" className={styles.headerButton} onClick={() => {}}>
               問題を追加
-            </button>
+            </Button>
           </div>
         </div>
       </header>
 
-      <section className={styles.listCard}>
-        <h2 className={styles.listHeading}>問題一覧</h2>
+      <Card className={styles.listCard}>
+        <CardHeading className={styles.listHeading}>問題一覧</CardHeading>
         <div className={styles.filters}>
           <div className={styles.filterCourse}>
-            <label className={styles.label} htmlFor="WELG0130-course">
-              コース
-            </label>
-            <select
+            <FieldLabel htmlFor="WELG0130-course">コース</FieldLabel>
+            <SelectField
               id="WELG0130-course"
-              className={styles.select}
+              className={styles.full}
               value={courseId}
-              onChange={(event) => {
-                setCourseId(event.target.value);
-              }}
-            >
-              {questionBank.courseOptions.map((option) => (
-                <option key={option.id} value={option.id}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              options={questionBank.courseOptions}
+              onChange={setCourseId}
+            />
           </div>
           <div className={styles.filterFormat}>
-            <label className={styles.label} htmlFor="WELG0130-format">
-              形式
-            </label>
-            <select
+            <FieldLabel htmlFor="WELG0130-format">形式</FieldLabel>
+            <SelectField
               id="WELG0130-format"
-              className={styles.select}
+              className={styles.full}
               value={formatId}
-              onChange={(event) => {
-                setFormatId(event.target.value);
-              }}
-            >
-              {questionBank.formatOptions.map((option) => (
-                <option key={option.id} value={option.id}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              options={questionBank.formatOptions}
+              onChange={setFormatId}
+            />
           </div>
           <div className={styles.filterStatus}>
-            <label className={styles.label} htmlFor="WELG0130-status">
-              状態
-            </label>
-            <select
+            <FieldLabel htmlFor="WELG0130-status">状態</FieldLabel>
+            <SelectField
               id="WELG0130-status"
-              className={styles.select}
+              className={styles.full}
               value={statusId}
-              onChange={(event) => {
-                setStatusId(event.target.value);
+              options={[{ id: "all", label: "すべて" }, ...lessonStatusOptions(QUESTION_STATUS_EXCLUDED)]}
+              onChange={(value) => {
+                if (isQuestionStatusFilter(value)) {
+                  setStatusId(value);
+                }
               }}
+            />
+          </div>
+        </div>
+
+        <DataTableHeader style={{ gridTemplateColumns: QUESTION_COLUMNS }}>
+          <DataTableCell>ID</DataTableCell>
+          <DataTableCell>問題文</DataTableCell>
+          <DataTableCell>レッスン</DataTableCell>
+          <DataTableCell>形式</DataTableCell>
+          <DataTableCell>状態</DataTableCell>
+          <DataTableCell>更新日</DataTableCell>
+        </DataTableHeader>
+        {questionBank.questions.map((question) => {
+          return (
+            <DataTableRow
+              key={question.id}
+              className={question.selected ? styles.selectedRow : undefined}
+              style={{ gridTemplateColumns: QUESTION_COLUMNS }}
             >
-              {questionBank.statusOptions.map((option) => (
-                <option key={option.id} value={option.id}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+              <DataTableCell>{question.id}</DataTableCell>
+              <DataTableCell>{question.prompt}</DataTableCell>
+              <DataTableCell>
+                {question.lessonOrder} {question.lessonName}
+              </DataTableCell>
+              <DataTableCell>{formatLabel(question.format)}</DataTableCell>
+              <DataTableCell>
+                {question.status === "published" ? (
+                  <StatusBadge tone={question.status} className={styles.badgePublished} />
+                ) : null}
+                {question.status === "draft" ? (
+                  <StatusBadge tone={question.status} className={styles.badgeDraft} />
+                ) : null}
+                {question.status === "private" ? (
+                  <StatusBadge tone={question.status} className={styles.badgePrivate} />
+                ) : null}
+              </DataTableCell>
+              <DataTableCell>{formatMonthDay(question.updatedOn)}</DataTableCell>
+            </DataTableRow>
+          );
+        })}
+        <ListCount count={questionBank.questions.length} />
+      </Card>
 
-        <div className={styles.table}>
-          <div className={styles.headRow}>
-            <span>ID</span>
-            <span>問題文</span>
-            <span>レッスン</span>
-            <span>形式</span>
-            <span>状態</span>
-            <span>更新日</span>
-          </div>
-          {questionBank.questions.map((question) => {
-            const badge = statusBadge(question.status);
-            return (
-              <div
-                key={question.id}
-                className={question.selected ? styles.selectedRow : styles.dataRow}
-              >
-                <span>{question.id}</span>
-                <span>{question.prompt}</span>
-                <span>
-                  {question.lessonOrder} {question.lessonName}
-                </span>
-                <span>{formatLabel(question.format)}</span>
-                <span>
-                  {badge ? <span className={`${styles.statusBadge} ${badge.className}`}>{badge.label}</span> : null}
-                </span>
-                <span>{question.updatedOn}</span>
-              </div>
-            );
-          })}
-        </div>
-        {questionBank.questions.length > 0 ? (
-          <p className={styles.count}>1〜{questionBank.questions.length}件を表示</p>
-        ) : null}
-      </section>
-
-      <section className={styles.editCard}>
-        <h2 className={styles.editHeading}>問題を編集（{draftSource.questionId}）</h2>
+      <Card className={styles.editCard}>
+        <CardHeading className={styles.editHeading}>問題を編集（{draftSource.questionId}）</CardHeading>
         <div className={styles.columns}>
           <div className={styles.column}>
-            <label className={styles.label} htmlFor="WELG0130-prompt">
-              問題文
-            </label>
-            <textarea
+            <FieldLabel htmlFor="WELG0130-prompt">問題文</FieldLabel>
+            <TextArea
               id="WELG0130-prompt"
               className={`${styles.textarea} ${styles.promptInput}`}
-              rows={4}
               value={prompt}
-              onChange={(event) => {
-                setPrompt(event.target.value);
-              }}
+              onChange={setPrompt}
             />
-            <label className={`${styles.label} ${styles.explanationLabel}`} htmlFor="WELG0130-explanation">
+            <FieldLabel className={styles.explanationLabel} htmlFor="WELG0130-explanation">
               解説
-            </label>
-            <textarea
+            </FieldLabel>
+            <TextArea
               id="WELG0130-explanation"
               className={`${styles.textarea} ${styles.explanationInput}`}
-              rows={3}
               value={explanation}
-              onChange={(event) => {
-                setExplanation(event.target.value);
-              }}
+              onChange={setExplanation}
             />
           </div>
           <div className={styles.column}>
-            <p className={`${styles.label} ${styles.choiceLabel}`}>選択肢（正解を1つ選択）</p>
+            <FieldLabel className={styles.choiceLabel}>選択肢（正解を1つ選択）</FieldLabel>
             <div className={styles.choices}>
               {choices.map((choice) => (
                 <div key={choice.id} className={styles.choiceRow}>
@@ -218,12 +201,12 @@ export function QuestionBankView() {
                     }}
                   />
                   <span className={styles.choiceMark}>{choice.id}</span>
-                  <input
+                  <TextInput
+                    id={`WELG0130-choice-${choice.id}`}
                     className={styles.choiceInput}
-                    type="text"
                     value={choice.text}
-                    onChange={(event) => {
-                      updateChoiceText(choice.id, event.target.value);
+                    onChange={(text) => {
+                      updateChoiceText(choice.id, text);
                     }}
                   />
                 </div>
@@ -233,14 +216,14 @@ export function QuestionBankView() {
         </div>
         <div className={styles.divider} />
         <div className={styles.footerActions}>
-          <button type="button" className={styles.secondaryButton}>
+          <Button variant="secondary" className={styles.headerButton} onClick={() => {}}>
             下書きとして保存
-          </button>
-          <button type="button" className={styles.primaryButton}>
+          </Button>
+          <Button variant="primary" className={styles.headerButton} onClick={() => {}}>
             保存して公開
-          </button>
+          </Button>
         </div>
-      </section>
+      </Card>
     </div>
   );
 }

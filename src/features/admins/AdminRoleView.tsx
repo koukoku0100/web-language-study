@@ -1,8 +1,17 @@
 "use client";
 
 import { useAppSelector } from "@/store/hooks";
+import { Button } from "@/components/button/Button";
+import { Card } from "@/components/card/Card";
+import { CardHeading } from "@/components/card-heading/CardHeading";
+import { DataTableCell, DataTableHeader, DataTableRow } from "@/components/data-table/DataTable";
+import { PageTitle } from "@/components/page-title/PageTitle";
+import { SampleBadge } from "@/components/sample-badge/SampleBadge";
+import { StatusBadge } from "@/components/status-badge/StatusBadge";
 import type { PermissionRow } from "./types";
 import styles from "./AdminRoleView.module.css";
+
+const ACCOUNT_COLUMNS = "175px 259px 203px 84px 82px";
 
 function permissionMark(row: PermissionRow, roleId: string) {
   const cell = row.cells.find((item) => item.roleId === roleId);
@@ -11,16 +20,6 @@ function permissionMark(row: PermissionRow, roleId: string) {
   }
   if (cell.value === "allowed" || cell.value === "denied") {
     return cell.value;
-  }
-  return null;
-}
-
-function statusBadge(status: string) {
-  if (status === "active") {
-    return { label: "利用中", className: styles.badgeActive };
-  }
-  if (status === "suspended") {
-    return { label: "停止中", className: styles.badgeSuspended };
   }
   return null;
 }
@@ -47,77 +46,76 @@ export function AdminRoleView() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <div>
-          <h1 className={styles.title}>{adminRole.title}</h1>
-          <p className={styles.description}>{adminRole.description}</p>
-        </div>
-        {adminRole.showSampleDataBadge ? <p className={styles.sampleBadge}>サンプルデータ</p> : null}
+        <PageTitle
+          title={adminRole.title}
+          description={adminRole.description}
+          descriptionClassName={styles.nowrap}
+        />
+        {adminRole.showSampleDataBadge ? <SampleBadge className={styles.sampleBadge} /> : null}
       </header>
 
-      <section className={styles.permissionCard}>
-        <h2 className={styles.cardHeading}>{adminRole.permissionHeading}</h2>
+      <Card className={styles.permissionCard}>
+        <CardHeading className={styles.permissionHeading}>{adminRole.permissionHeading}</CardHeading>
         <p className={styles.note}>{adminRole.permissionNote}</p>
-        <div className={styles.permissionHead} style={{ gridTemplateColumns: permissionColumns }}>
-          <span className={styles.cell}>操作</span>
+        <DataTableHeader className={styles.permissionHead} style={{ gridTemplateColumns: permissionColumns }}>
+          <DataTableCell>操作</DataTableCell>
           {adminRole.roleColumns.map((column) => (
-            <span key={column.id} className={styles.cell}>
-              {column.name}
-            </span>
+            <DataTableCell key={column.id}>{column.name}</DataTableCell>
           ))}
-        </div>
+        </DataTableHeader>
         {adminRole.permissionRows.map((row) => (
-          <div
+          <DataTableRow
             key={row.id}
             className={styles.permissionRow}
             style={{ gridTemplateColumns: permissionColumns }}
           >
-            <span className={`${styles.cell} ${styles.actionCell}`}>{row.actionLabel}</span>
+            <DataTableCell className={styles.actionCell}>{row.actionLabel}</DataTableCell>
             {adminRole.roleColumns.map((column) => {
               const mark = permissionMark(row, column.id);
               return (
-                <span key={column.id} className={styles.cell}>
-                  {mark === "allowed" ? <span className={styles.allowedBadge}>可</span> : null}
+                <DataTableCell key={column.id}>
+                  {mark === "allowed" ? <StatusBadge tone="allowed" /> : null}
                   {mark === "denied" ? <span className={styles.deniedMark}>不可</span> : null}
-                </span>
+                </DataTableCell>
               );
             })}
-          </div>
+          </DataTableRow>
         ))}
-      </section>
+      </Card>
 
-      <section className={styles.accountCard}>
+      <Card className={styles.accountCard}>
         <div className={styles.accountHeader}>
-          <h2 className={styles.cardHeading}>{adminRole.accountHeading}</h2>
-          <button type="button" className={styles.addButton}>
+          <CardHeading>{adminRole.accountHeading}</CardHeading>
+          <Button variant="primary" className={styles.addButton} onClick={() => {}}>
             管理者を追加
-          </button>
+          </Button>
         </div>
-        <div className={styles.accountHead}>
-          <span className={styles.cell}>名前</span>
-          <span className={styles.cell}>メールアドレス</span>
-          <span className={styles.cell}>ロール</span>
-          <span className={styles.cell}>状態</span>
-          <span className={styles.cell}>操作</span>
-        </div>
-        {adminRole.accounts.map((account) => {
-          const badge = statusBadge(account.status);
-          return (
-            <div key={account.id} className={styles.accountRow}>
-              <span className={`${styles.cell} ${styles.nameCell}`}>{account.name}</span>
-              <span className={styles.cell}>{account.email}</span>
-              <span className={styles.cell}>{account.roleName}</span>
-              <span className={styles.cell}>
-                {badge ? <span className={`${styles.statusBadge} ${badge.className}`}>{badge.label}</span> : null}
-              </span>
-              <span className={styles.cell}>
-                <button type="button" className={styles.editButton}>
-                  編集
-                </button>
-              </span>
-            </div>
-          );
-        })}
-      </section>
+        <DataTableHeader className={styles.accountHead} style={{ gridTemplateColumns: ACCOUNT_COLUMNS }}>
+          <DataTableCell>名前</DataTableCell>
+          <DataTableCell>メールアドレス</DataTableCell>
+          <DataTableCell>ロール</DataTableCell>
+          <DataTableCell>状態</DataTableCell>
+          <DataTableCell>操作</DataTableCell>
+        </DataTableHeader>
+        {adminRole.accounts.map((account) => (
+          <DataTableRow key={account.id} className={styles.accountRow} style={{ gridTemplateColumns: ACCOUNT_COLUMNS }}>
+            <DataTableCell className={styles.nameCell}>{account.name}</DataTableCell>
+            <DataTableCell>{account.email}</DataTableCell>
+            <DataTableCell>{account.roleName}</DataTableCell>
+            <DataTableCell>
+              {account.status === "active" ? <StatusBadge tone="active" className={styles.badgeActive} /> : null}
+              {account.status === "suspended" ? (
+                <StatusBadge tone="suspended" className={styles.badgeSuspended} />
+              ) : null}
+            </DataTableCell>
+            <DataTableCell>
+              <Button variant="secondary" className={styles.editButton} onClick={() => {}}>
+                編集
+              </Button>
+            </DataTableCell>
+          </DataTableRow>
+        ))}
+      </Card>
     </div>
   );
 }

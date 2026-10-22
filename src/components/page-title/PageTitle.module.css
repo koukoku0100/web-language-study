@@ -1,0 +1,14 @@
+.title {
+  color: #1b2430;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 18px;
+}
+
+.description {
+  margin-top: var(--page-description-margin-top, 10px);
+  color: #5b6675;
+  font-size: var(--page-description-font-size, 11px);
+  font-weight: normal;
+  line-height: var(--page-description-font-size, 11px);
+}

@@ -1,0 +1,24 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--button-height, 32px);
+  padding: 0 var(--button-padding-inline, 15px);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: var(--button-font-size, 11px);
+  font-weight: var(--button-font-weight, 400);
+  line-height: 11px;
+}
+
+.primary {
+  border: 0;
+  background: #2b4c9b;
+  color: #ffffff;
+}
+
+.secondary {
+  border: 1px solid #919ca8;
+  background: #ffffff;
+  color: #1b2430;
+}

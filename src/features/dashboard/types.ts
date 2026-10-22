@@ -1,7 +1,12 @@
+import type { CalendarDate } from "@/features/calendar-date/calendarDate";
+
+export type MetricValueKind = "count" | "percent";
+
 export type MetricCard = {
   id: string;
   label: string;
-  valueText: string;
+  value: number;
+  valueKind: MetricValueKind;
   note: string;
 };
 
@@ -17,7 +22,7 @@ export type PendingLesson = {
   id: string;
   title: string;
   courseName: string;
-  updatedOn: string;
+  updatedOn: CalendarDate;
   editorName: string;
 };
 
